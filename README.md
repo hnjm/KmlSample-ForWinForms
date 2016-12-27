@@ -3,7 +3,7 @@
 ### Description
 KML is the file format for displaying geographic data in a Google Earth browser such as Google Earth. Now, you can also display such a file on a Map Suite control. Thanks to its flexible architecture to extent to new file formats, in today’s project we wrote the logic for supporting KML. Look at the class KmlfeatureSource inheriting from FeatureSource to see how the logic for reading FML files was implemented. As well, you can see the class KmlStyle inheriting from Style for the drawing logic. And feel free to modify and improve those classes with your own implementations.
 
-![Screenshot](https://github.com/ThinkGeo/KmlExtensionSampleSample-ForWinForms/blob/master/ScreenShot.png)
+![Screenshot](https://github.com/ThinkGeo/KmlSample-ForWinForms/blob/master/ScreenShot.png)
 
 ### Requirements
 This sample makes use of the following NuGet Packages

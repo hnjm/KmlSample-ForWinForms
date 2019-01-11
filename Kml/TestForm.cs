@@ -21,25 +21,30 @@ namespace KmlExtensionSample
 
         private void TestForm_Load(object sender, EventArgs e)
         {
-            winformsMap1.MapUnit = GeographyUnit.DecimalDegree;
-            winformsMap1.CurrentExtent = new RectangleShape(-122.0874, 37.4245, -122.0804, 37.4201);
+            winformsMap1.MapUnit = GeographyUnit.Meter;
+            winformsMap1.ZoomLevelSet = ThinkGeoCloudMapsOverlay.GetZoomLevelSet();
+            winformsMap1.CurrentExtent = new RectangleShape(-10777598, 3912998, -10776008, 3912026);
             winformsMap1.BackgroundOverlay.BackgroundBrush = new GeoSolidBrush(GeoColor.FromArgb(255, 198, 255, 255));
-            winformsMap1.ZoomLevelSnapping = ZoomLevelSnappingMode.Default;
 
-            WorldMapKitWmsDesktopOverlay worldMapKitWmsDesktopOverlay = new WorldMapKitWmsDesktopOverlay();
-            winformsMap1.Overlays.Add(worldMapKitWmsDesktopOverlay);
+            // Add ThinkGeoCloudMapsOverlay as basemap
+            ThinkGeoCloudMapsOverlay thinkGeoCloudMapsOverlay = new ThinkGeoCloudMapsOverlay();
+            winformsMap1.Overlays.Add(thinkGeoCloudMapsOverlay);
 
-            KmlFeatureLayer.BuildIndexFile("../../App_Data/KML_Samples.kml", BuildIndexMode.Rebuild);
-            KmlFeatureLayer layer = new KmlFeatureLayer("../../App_Data/KML_Samples.kml");
-            layer.ZoomLevelSet.ZoomLevel01.ApplyUntilZoomLevel = ApplyUntilZoomLevel.Level20;
-
-            layer.ZoomLevelSet.ZoomLevel01.DefaultAreaStyle = new AreaStyle(new GeoPen(GeoColor.SimpleColors.Black), new GeoSolidBrush(GeoColor.SimpleColors.Yellow));
-            layer.ZoomLevelSet.ZoomLevel01.DefaultLineStyle = new LineStyle(new GeoPen(GeoColor.SimpleColors.Blue, 5));
-            layer.ZoomLevelSet.ZoomLevel01.DefaultPointStyle = new PointStyle(PointSymbolType.Circle, new GeoSolidBrush(GeoColor.SimpleColors.Green), 10);
-
-            LayerOverlay stateOverlay = new LayerOverlay();
-            stateOverlay.Layers.Add("KmlLayer", layer);
-            winformsMap1.Overlays.Add("StateOverlay", stateOverlay);
+            KmlFeatureLayer kmlFeatureLayer = new KmlFeatureLayer("../../App_Data/ThinkGeoHeadquarters.kml");
+            kmlFeatureLayer.StylingType = KmlStylingType.StandardStyling;
+            // Set area style,line style,point style and text style.
+            TextStyle textStyle = new TextStyle("name", (new GeoFont("Arial", 12)), new GeoSolidBrush(GeoColor.StandardColors.DarkOliveGreen));
+            textStyle.HaloPen = new GeoPen(GeoColor.StandardColors.FloralWhite, 5);
+            textStyle.SplineType = SplineType.ForceSplining;
+            kmlFeatureLayer.ZoomLevelSet.ZoomLevel01.DefaultAreaStyle.FillSolidBrush = new GeoSolidBrush(new GeoColor(50, GeoColor.SimpleColors.Orange));
+            kmlFeatureLayer.ZoomLevelSet.ZoomLevel01.DefaultAreaStyle.OutlinePen = new GeoPen(GeoColor.SimpleColors.Black);
+            kmlFeatureLayer.ZoomLevelSet.ZoomLevel01.DefaultLineStyle = new LineStyle(new GeoPen(GeoColor.SimpleColors.Orange, 5));
+            kmlFeatureLayer.ZoomLevelSet.ZoomLevel01.DefaultPointStyle.SymbolPen = new GeoPen(GeoColor.FromArgb(255, GeoColor.StandardColors.Green), 8);
+            kmlFeatureLayer.ZoomLevelSet.ZoomLevel01.DefaultTextStyle = textStyle;
+            kmlFeatureLayer.ZoomLevelSet.ZoomLevel01.ApplyUntilZoomLevel = ApplyUntilZoomLevel.Level20;
+            LayerOverlay overlay = new LayerOverlay();
+            overlay.Layers.Add("KmlLayer", kmlFeatureLayer);
+            winformsMap1.Overlays.Add("Overlay", overlay);
 
             winformsMap1.Refresh();
         }
